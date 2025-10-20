@@ -1,0 +1,78 @@
+/* Basic gallery + lightbox styles (created by assistant)
+   - Ensures images scale and enlarge inside a centered modal
+   - Includes responsive rules and smooth transitions
+*/
+:root{
+  --bg:#0b0b0b;
+  --card-bg:#111;
+  --muted:#9ca3af;
+  --text:#fff;
+}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.container{max-width:1200px;margin:0 auto;padding:32px}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+header h1{letter-spacing:.4em;font-weight:300;margin:0}
+.hero{display:flex;align-items:center;justify-content:center;padding:48px 0;text-align:center}
+.hero h2{font-weight:200;font-size:48px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:var(--card-bg);border-radius:8px;overflow:hidden;position:relative}
+.card img{width:100%;height:320px;object-fit:cover;display:block;transition:transform .25s ease}
+.card:hover img{transform:scale(1.03)}
+
+/* Feature the first two cards as main focus on wide screens */
+.grid > .card:nth-child(-n+3){
+  grid-column: span 2;
+  position:relative;
+}
+.grid > .card:nth-child(-n+3) img{
+  height:440px;
+  transition:transform .28s ease, box-shadow .28s ease;
+  box-shadow:0 18px 50px rgba(0,0,0,.6);
+}
+.grid > .card:nth-child(-n+2):hover img{
+  transform:scale(1.04);
+}
+.label{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:var(--muted);padding:6px 8px;font-size:12px;border-radius:4px}
+.meta{padding:12px}
+.meta h3{margin:0 0 6px;font-weight:300;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta p{margin:0;color:var(--muted);font-size:13px}
+footer{padding:40px 0;color:var(--muted);text-align:center}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);opacity:0;visibility:hidden;transition:opacity .25s ease, visibility .25s;z-index:999}
+.lightbox.open{opacity:1;visibility:visible}
+.lb-content{max-width:95vw;max-height:90vh;display:flex;align-items:center;justify-content:center;position:relative}
+.lb-content img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.6);transition:transform .18s ease,opacity .18s ease}
+.lb-caption{color:var(--muted);margin-top:8px;text-align:center}
+.lb-close,.lb-prev,.lb-next{position:fixed;background:rgba(0,0,0,.45);border:0;color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:20px}
+.lb-close{top:18px;right:18px}
+.lb-prev{left:18px;top:50%;transform:translateY(-50%)}
+.lb-next{right:18px;top:50%;transform:translateY(-50%)}
+
+/* Touch targets */
+@media (max-width:640px){
+  .card img{height:220px}
+  .lb-close,.lb-prev,.lb-next{padding:12px;font-size:22px}
+  .lb-prev{left:8px}
+  .lb-next{right:8px}
+}
+
+/* On medium and small screens, don't span columns — keep a single column flow */
+@media (max-width:1000px){
+  .grid > .card:nth-child(-n+3){
+    grid-column: auto;
+  }
+  .grid > .card:nth-child(-n+3) img{height:300px}
+}
+
+@media (max-width:700px){
+  /* On small screens make featured cards normal flow with smaller image */
+  .grid > .card:nth-child(-n+3){ grid-column:auto }
+  .grid > .card:nth-child(-n+3) img{ height:220px }
+}
+
+/* Small helper for zoom cursor */
+.card{cursor:zoom-in}
+
+/* Prevent body scroll when lightbox open */
+body.lightbox-open{overflow:hidden}
