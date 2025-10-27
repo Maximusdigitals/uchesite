@@ -7,30 +7,64 @@
   --card-bg:#111;
   --muted:#9ca3af;
   --text:#fff;
+  --gap:18px;
+  --container-padding:32px;
+  --card-height:320px;
+  --card-height-lg:440px;
+  --card-height-sm:220px;
 }
-html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
-.container{max-width:1200px;margin:0 auto;padding:32px}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:var(--container-padding)}
 header{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
-header h1{letter-spacing:.4em;font-weight:300;margin:0}
-.hero{display:flex;align-items:center;justify-content:center;padding:48px 0;text-align:center}
-.hero h2{font-weight:200;font-size:48px;margin:0 0 12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.card{background:var(--card-bg);border-radius:8px;overflow:hidden;position:relative}
-.card img{width:100%;height:320px;object-fit:cover;display:block;transition:transform .25s ease}
+header h1{letter-spacing:.2em;font-weight:400;margin:0;font-size:18px}
+ .hero{display:flex;align-items:center;justify-content:center;padding:36px 0 18px;text-align:center}
+ .hero h2{font-weight:200;font-size:40px;margin:0 0 10px}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--gap)}
+/* Card visuals */
+.card{background:var(--card-bg);border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column;min-height:240px;transition:transform .18s ease,box-shadow .18s ease}
+.card img{width:100%;height:var(--card-height);object-fit:cover;display:block;transition:transform .25s ease,filter .18s ease}
+.card:hover{transform:translateY(-6px);box-shadow:0 22px 60px rgba(0,0,0,.6)}
 .card:hover img{transform:scale(1.03)}
+.card:focus-within, .card:focus{outline:3px solid rgba(255,255,255,0.06);outline-offset:3px}
 
-/* Feature the first two cards as main focus on wide screens */
-.grid > .card:nth-child(-n+3){
+/* For the main gallery, feature the first few cards as main focus on wide screens.
+   Do not apply this to forwarder grids (which should remain a single row).
+*/
+.grid:not(.forwarder) > .card:nth-child(-n+3){
   grid-column: span 2;
   position:relative;
 }
-.grid > .card:nth-child(-n+3) img{
+.grid:not(.forwarder) > .card:nth-child(-n+3) img{
   height:440px;
   transition:transform .28s ease, box-shadow .28s ease;
   box-shadow:0 18px 50px rgba(0,0,0,.6);
 }
-.grid > .card:nth-child(-n+2):hover img{
+.grid:not(.forwarder) > .card:nth-child(-n+2):hover img{
   transform:scale(1.04);
+}
+
+/* Forwarder grid: keep three tiles on one row on wide screens */
+.forwarder{ grid-template-columns: repeat(3, minmax(220px, 1fr)); }
+.forwarder .card img{ height:220px }
+@media (max-width:900px){ .forwarder{ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
+.cta{display:inline-block;background:#fff;color:#0b0b0b;padding:8px 14px;border-radius:6px;text-decoration:none;font-weight:600}
+.forwarder .card{position:relative;overflow:hidden}
+.forwarder .card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.25));opacity:0;transition:opacity .18s}
+.forwarder .card:hover::after{opacity:1}
+
+
+
+/* responsive adjustments */
+@media (max-width:1000px){
+  .grid:not(.forwarder) > .card:nth-child(-n+3){ grid-column:auto }
+  .grid:not(.forwarder) > .card:nth-child(-n+3) img{ height:300px }
+}
+
+@media (max-width:800px){
+  .container{padding:18px}
+  .hero h2{font-size:28px}
+  .card img{height:var(--card-height-sm)}
+  .hero-visual{display:none}
 }
 .label{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:var(--muted);padding:6px 8px;font-size:12px;border-radius:4px}
 .meta{padding:12px}
@@ -76,3 +110,19 @@ footer{padding:40px 0;color:var(--muted);text-align:center}
 
 /* Prevent body scroll when lightbox open */
 body.lightbox-open{overflow:hidden}
+
+/* Hero-card: horizontal layout on wide screens, stacked on small screens */
+.grid > .hero-card{ grid-column: span 2; display:flex; align-items:center; }
+.grid > .hero-card .hero{ display:flex; flex-direction:row; gap:18px; align-items:center; width:100%; padding:18px; }
+.grid > .hero-card .hero .hero-text{ max-width:720px }
+.grid > .hero-card .hero h2{ font-size:28px; margin:0 }
+.grid > .hero-card .hero p{ margin:0; color:var(--muted); }
+
+@media (max-width:1000px){
+  .grid > .hero-card{ grid-column: auto }
+  .grid > .hero-card .hero{ flex-direction:column; align-items:flex-start }
+}
+
+/* Hero visual */
+.hero-visual img{ width:220px; height:140px; object-fit:cover; border-radius:6px }
+@media (max-width:800px){ .hero-visual{ display:none } }
