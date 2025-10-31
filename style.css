@@ -526,6 +526,10 @@ footer p {
     .navbar.open { align-items: flex-start }
 }
 
+/* Status colors for lightbox */
+#simple-lightbox .slb-status.available { color: #4CAF50; font-weight:600 }
+#simple-lightbox .slb-status.sold { color: #E53935; font-weight:600 }
+
 /* Lightbox styles (basic, used by lightbox.js) */
 #simple-lightbox{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:9999 }
 #simple-lightbox.open{ display:flex }
